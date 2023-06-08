@@ -5,7 +5,7 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(8090);
   console.log('http://127.0.0.1:3000/');
   LogDebug._info('sdfsdfdsfdsfd');
   console.log('-----------------------');
