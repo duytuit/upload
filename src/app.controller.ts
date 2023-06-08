@@ -13,9 +13,11 @@ import { AjaxResult } from './common/class/ajax-result.class';
 export class AppController {
   /* Tải lên tệp đơn */
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file',{
-    limits: {fileSize: 50000000}, //50MB
-}))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: 50000000 }, //50MB
+    }),
+  )
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Query('fileName') fileName,
@@ -29,9 +31,11 @@ export class AppController {
 
   /* Tải lên tệp tải lên */
   @Post('uploads')
-  @UseInterceptors(FilesInterceptor('files',3,{
-    limits: {fileSize: 50000000}, //50MB
-  }))
+  @UseInterceptors(
+    FilesInterceptor('files', 3, {
+      limits: { fileSize: 50000000 }, //50MB
+    }),
+  )
   async uploadFils(@UploadedFiles() files: Array<Express.Multer.File>) {
     /* Không xử lý */
     return AjaxResult.success(files);

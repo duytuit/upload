@@ -54,17 +54,21 @@ export function storage(uploadPath) {
         };
       },
       inject: [ConfigService],
-    
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+      serveStaticOptions: {
+        setHeaders: (res) => {
+          res.set('Cache-Control', 'max-age=2592000');
+        },
+      },
     }),
   ],
   controllers: [AppController],
   providers: [
     MulterModule,
-     //Bộ lọc toàn cầu
-     {
+    //Bộ lọc toàn cầu
+    {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
