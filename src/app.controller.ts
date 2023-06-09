@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   Query,
   UploadedFile,
@@ -9,10 +10,14 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { AjaxResult } from './common/class/ajax-result.class';
 
-@Controller('common')
+@Controller()
 export class AppController {
+  @Get()
+  index() {
+    return 'xin chào!';
+  }
   /* Tải lên tệp đơn */
-  @Post('upload')
+  @Post('common/upload')
   @UseInterceptors(
     FileInterceptor('file', {
       limits: { fileSize: 50000000 }, //50MB
@@ -30,7 +35,7 @@ export class AppController {
   }
 
   /* Tải lên tệp tải lên */
-  @Post('uploads')
+  @Post('common/uploads')
   @UseInterceptors(
     FilesInterceptor('files', 3, {
       limits: { fileSize: 50000000 }, //50MB
