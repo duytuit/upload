@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Query,
+  Res,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -32,8 +33,8 @@ export class AppController {
     @Query('fileName') fileName,
   ) {
     return AjaxResult.success({
-      fileName,
-      originalname: file.originalname,
+      path: file.path,
+      filename: file.filename,
       mimetype: file.mimetype,
     });
   }
@@ -62,6 +63,24 @@ export class AppController {
     if (result.status == true) {
       delete result.status;
       return AjaxResult.success(result);
+    } else {
+      delete result.status;
+      return AjaxResult.error(result);
+    }
+  }
+  @Get('common/upload/redirect')
+  async uploadFileFromUrlRedirect(@Query() param, @Res() res) {
+    const currentDate = moment_3().format('YYYY-MM-DD');
+    const path = `public/upload/${currentDate}`;
+    try {
+      await fs.promises.stat(path);
+    } catch (error) {
+      await fs.promises.mkdir(path, { recursive: true });
+    }
+    const result = await this.handleUploadFile(param, currentDate);
+    if (result.status == true) {
+      delete result.status;
+      return res.redirect(result.path);
     } else {
       delete result.status;
       return AjaxResult.error(result);
