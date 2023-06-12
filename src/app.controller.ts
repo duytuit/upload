@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Res,
@@ -84,6 +85,22 @@ export class AppController {
     } else {
       delete result.status;
       return AjaxResult.error(result);
+    }
+  }
+  @Get('common/remove/file?:path')
+  async removeFilePath(@Query('path') path) {
+    if (fs.existsSync(`./public/${path}`)) {
+      console.log(path);
+      fs.unlink(`./public/${path}`, (error) => {
+        if (error) {
+          return AjaxResult.error('Xóa thất bại.');
+        } else {
+          console.log('Xóa thành công.');
+        }
+      });
+      return AjaxResult.success('Xóa thành công.');
+    } else {
+      return AjaxResult.error('Không tìm thấy đường dẫn.');
     }
   }
   private handleUploadFile(param, currentDate): Promise<any> {
