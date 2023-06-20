@@ -83,7 +83,7 @@ export class AppController {
       param.file_name.lastIndexOf('/') + 1,
     );
     const downloadPath = `public/upload/${currentDate}/${filename}`;
-    const ext = LogDebug.get_url_extension(fileUrl);
+    const ext = LogDebug.get_url_extension(filename);
     return new Promise((resolve, reject) => {
       fs.mkdirSync(path);
       const outStream = fs.createWriteStream(downloadPath);
