@@ -4,6 +4,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   Res,
   UploadedFile,
   UploadedFiles,
@@ -70,7 +71,7 @@ export class AppController {
     }
   }
   @Post('common/upload/buffer')
-  async uploadFileFromBuffer(@Query() param) {
+  async uploadFileFromBuffer(@Req() param) {
     const currentDate = moment_3().format('YYYY-MM-DD');
     const path = `public/upload/${currentDate}`;
     try {
