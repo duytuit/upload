@@ -63,7 +63,7 @@ export class AppController {
     } catch (error) {
       await fs.promises.mkdir(path, { recursive: true });
     }
-    const result = await this.handleUploadFile(param, currentDate);
+    const result = await this.handleUploadFileByBuffer(param, currentDate);
     if (result.status == true) {
       delete result.status;
       return AjaxResult.success(result);
@@ -81,33 +81,14 @@ export class AppController {
     } catch (error) {
       await fs.promises.mkdir(path, { recursive: true });
     }
-    const fileUrl = param.buffer;
-    const filename = param.file_name.substring(
-      param.file_name.lastIndexOf('/') + 1,
-    );
-    const downloadPath = `public/upload/${currentDate}/${filename}`;
-    const ext = LogDebug.get_url_extension(filename);
-    return new Promise((resolve, reject) => {
-      const outStream = fs.createWriteStream(downloadPath);
-      const buff = Buffer.from(param.buffer, 'utf-8');
-      outStream.write(buff);
-      outStream.end();
-      outStream.on('finish', () => {
-        resolve({
-          status: true,
-          path: `/upload/${currentDate}/${filename}`,
-          filename: filename,
-          ext: ext,
-        });
-      });
-      outStream.on('error', (err) => {
-        console.error('Error while downloading file:', err);
-        reject({
-          status: false,
-          path: '',
-        });
-      });
-    });
+    const result = await this.handleUploadFile(param, currentDate);
+    if (result.status == true) {
+      delete result.status;
+      return AjaxResult.success(result);
+    } else {
+      delete result.status;
+      return AjaxResult.error(result);
+    }
   }
   @Get('common/upload/redirect')
   async uploadFileFromUrlRedirect(@Query() param, @Res() res) {
@@ -191,6 +172,34 @@ export class AppController {
             path: '',
           });
         });
+    });
+  }
+  private handleUploadFileByBuffer(param, currentDate): Promise<any> {
+    const filename = param.file_name.substring(
+      param.file_name.lastIndexOf('/') + 1,
+    );
+    const downloadPath = `public/upload/${currentDate}/${filename}`;
+    const ext = LogDebug.get_url_extension(filename);
+    return new Promise((resolve, reject) => {
+      const outStream = fs.createWriteStream(downloadPath);
+      const buff = Buffer.from(param.buffer, 'utf-8');
+      outStream.write(buff);
+      outStream.end();
+      outStream.on('finish', () => {
+        resolve({
+          status: true,
+          path: `/upload/${currentDate}/${filename}`,
+          filename: filename,
+          ext: ext,
+        });
+      });
+      outStream.on('error', (err) => {
+        console.error('Error while downloading file:', err);
+        reject({
+          status: false,
+          path: '',
+        });
+      });
     });
   }
 }
