@@ -89,7 +89,8 @@ export class AppController {
     const ext = LogDebug.get_url_extension(filename);
     return new Promise((resolve, reject) => {
       const outStream = fs.createWriteStream(downloadPath);
-      outStream.write(JSON.stringify(param.buffer));
+      const buff = Buffer.from(param.buffer, 'utf-8');
+      outStream.write(buff);
       outStream.end();
       outStream.on('finish', () => {
         resolve({
