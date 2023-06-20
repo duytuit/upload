@@ -78,8 +78,10 @@ export class AppController {
     } catch (error) {
       await fs.promises.mkdir(path, { recursive: true });
     }
-    const fileUrl = param.fileUrl;
-    const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    const fileUrl = param.buffer;
+    const filename = param.file_name.substring(
+      param.file_name.lastIndexOf('/') + 1,
+    );
     const downloadPath = `public/upload/${currentDate}/${filename}`;
     const ext = LogDebug.get_url_extension(fileUrl);
     return new Promise((resolve, reject) => {
