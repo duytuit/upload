@@ -27,7 +27,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const { status, result } = this.errorResult(exception);
     response.header('Content-Type', 'application/json; charset=utf-8');
     response.status(status).json(result);
-    LogDebug._info(exception.stack)
+    LogDebug._info(exception.stack);
   }
 
   /* Phân tích loại lỗi, được lấy Trạng thái Mã và giá trị trả về */

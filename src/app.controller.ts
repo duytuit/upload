@@ -74,7 +74,6 @@ export class AppController {
   }
   @Post('common/upload/buffer')
   async uploadFileFromBuffer(@Body() param) {
-    LogDebug._info(param);
     const currentDate = moment_3().format('YYYY-MM-DD');
     const path = `public/upload/${currentDate}`;
     try {
@@ -89,7 +88,6 @@ export class AppController {
     const downloadPath = `public/upload/${currentDate}/${filename}`;
     const ext = LogDebug.get_url_extension(filename);
     return new Promise((resolve, reject) => {
-      fs.mkdirSync(path);
       const outStream = fs.createWriteStream(downloadPath);
       outStream.write(param.buffer);
       outStream.end();
@@ -99,6 +97,13 @@ export class AppController {
           path: `/upload/${currentDate}/${filename}`,
           filename: filename,
           ext: ext,
+        });
+      });
+      outStream.on('error', (err) => {
+        console.error('Error while downloading file:', err);
+        reject({
+          status: false,
+          path: '',
         });
       });
     });
