@@ -14,20 +14,23 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { AjaxResult } from '../class/ajax-result.class';
 import { ApiException } from '../exceptions/api.exception';
 import { LogDebug } from '../helper/debugLog';
+import { Request } from 'express';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
+    const request = ctx.getRequest<Request>();
     const { status, result } = this.errorResult(exception);
     response.header('Content-Type', 'application/json; charset=utf-8');
     response.status(status).json(result);
-    LogDebug._info(exception.stack);
+    LogDebug._info(exception.stack, request);
   }
 
   /* Phân tích loại lỗi, được lấy Trạng thái Mã và giá trị trả về */
