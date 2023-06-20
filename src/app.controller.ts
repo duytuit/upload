@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
@@ -17,6 +18,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as moment_3 from 'moment';
 import { LogDebug } from './common/helper/debugLog';
+import { debuglog } from 'util';
 @Controller()
 export class AppController {
   @Get()
@@ -71,7 +73,8 @@ export class AppController {
     }
   }
   @Post('common/upload/buffer')
-  async uploadFileFromBuffer(@Req() param) {
+  async uploadFileFromBuffer(@Body() param) {
+    LogDebug._info(param);
     const currentDate = moment_3().format('YYYY-MM-DD');
     const path = `public/upload/${currentDate}`;
     try {
