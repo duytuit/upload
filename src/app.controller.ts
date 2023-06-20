@@ -63,7 +63,7 @@ export class AppController {
     } catch (error) {
       await fs.promises.mkdir(path, { recursive: true });
     }
-    const result = await this.handleUploadFileByBuffer(param, currentDate);
+    const result = await this.handleUploadFile(param, currentDate);
     if (result.status == true) {
       delete result.status;
       return AjaxResult.success(result);
@@ -81,7 +81,7 @@ export class AppController {
     } catch (error) {
       await fs.promises.mkdir(path, { recursive: true });
     }
-    const result = await this.handleUploadFile(param, currentDate);
+    const result = await this.handleUploadFileByBuffer(param, currentDate);
     if (result.status == true) {
       delete result.status;
       return AjaxResult.success(result);
