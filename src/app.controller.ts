@@ -69,6 +69,34 @@ export class AppController {
       return AjaxResult.error(result);
     }
   }
+  @Post('common/upload/buffer')
+  async uploadFileFromBuffer(@Query() param) {
+    const currentDate = moment_3().format('YYYY-MM-DD');
+    const path = `public/upload/${currentDate}`;
+    try {
+      await fs.promises.stat(path);
+    } catch (error) {
+      await fs.promises.mkdir(path, { recursive: true });
+    }
+    const fileUrl = param.fileUrl;
+    const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    const downloadPath = `public/upload/${currentDate}/${filename}`;
+    const ext = LogDebug.get_url_extension(fileUrl);
+    return new Promise((resolve, reject) => {
+      fs.mkdirSync(path);
+      const outStream = fs.createWriteStream(downloadPath);
+      outStream.write(param.buffer);
+      outStream.end();
+      outStream.on('finish', () => {
+        resolve({
+          status: true,
+          path: `/upload/${currentDate}/${filename}`,
+          filename: filename,
+          ext: ext,
+        });
+      });
+    });
+  }
   @Get('common/upload/redirect')
   async uploadFileFromUrlRedirect(@Query() param, @Res() res) {
     const currentDate = moment_3().format('YYYY-MM-DD');
