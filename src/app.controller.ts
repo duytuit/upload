@@ -19,6 +19,7 @@ import * as https from 'https';
 import * as moment_3 from 'moment';
 import { LogDebug } from './common/helper/debugLog';
 import { debuglog } from 'util';
+import * as moment from 'moment';
 @Controller()
 export class AppController {
   @Get()
@@ -132,7 +133,11 @@ export class AppController {
   }
   private handleUploadFile(param, currentDate): Promise<any> {
     const fileUrl = param.fileUrl;
-    const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    const filename = param.gettime
+      ? moment().format('YYYYMMDD_HHmmss') +
+        '_' +
+        fileUrl.substring(fileUrl.lastIndexOf('/') + 1)
+      : fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
     const downloadPath = `public/upload/${currentDate}/${filename}`;
     const ext = LogDebug.get_url_extension(fileUrl);
     // Choose the appropriate module based on the URL protocol
@@ -181,9 +186,11 @@ export class AppController {
     });
   }
   private handleUploadFileByBuffer(param, currentDate): Promise<any> {
-    const filename = param.file_name.substring(
-      param.file_name.lastIndexOf('/') + 1,
-    );
+    const filename = param.gettime
+      ? moment().format('YYYYMMDD_HHmmss') +
+        '_' +
+        param.file_name.substring(param.file_name.lastIndexOf('/') + 1)
+      : param.file_name.substring(param.file_name.lastIndexOf('/') + 1);
     const downloadPath = `public/upload/${currentDate}/${filename}`;
     const ext = LogDebug.get_url_extension(filename);
     return new Promise((resolve, reject) => {
