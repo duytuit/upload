@@ -56,7 +56,9 @@ export class AppController {
   }
   @Get('common/upload/path')
   async uploadFileFromUrl(@Query() param) {
-    const currentDate = moment_3().format('YYYY-MM-DD');
+    const currentDate = param.folder
+      ? param.folder
+      : moment_3().format('YYYY-MM-DD');
     const path = `public/upload/${currentDate}`;
     try {
       await fs.promises.stat(path);
@@ -73,8 +75,10 @@ export class AppController {
     }
   }
   @Post('common/upload/buffer')
-  async uploadFileFromBuffer(@Body() param) {
-    const currentDate = moment_3().format('YYYY-MM-DD');
+  async uploadFileFromBuffer(@Body() param, @Query() query) {
+    const currentDate = query.folder
+      ? query.folder
+      : moment_3().format('YYYY-MM-DD');
     const path = `public/upload/${currentDate}`;
     try {
       await fs.promises.stat(path);
@@ -92,7 +96,9 @@ export class AppController {
   }
   @Get('common/upload/redirect')
   async uploadFileFromUrlRedirect(@Query() param, @Res() res) {
-    const currentDate = moment_3().format('YYYY-MM-DD');
+    const currentDate = param.folder
+      ? param.folder
+      : moment_3().format('YYYY-MM-DD');
     const path = `public/upload/${currentDate}`;
     try {
       await fs.promises.stat(path);

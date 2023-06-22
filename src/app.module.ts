@@ -13,7 +13,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 export function storage(uploadPath) {
   return multer.diskStorage({
     destination: async (req, file, cd) => {
-      const currentDate = moment().format('YYYY-MM-DD');
+      console.log(req.query.folder);
+      const currentDate = req.query.folder
+        ? req.query.folder
+        : moment().format('YYYY-MM-DD');
       let path = '';
       if (uploadPath) {
         path = uploadPath + '/' + currentDate;
