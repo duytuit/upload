@@ -22,7 +22,7 @@ import * as moment from 'moment';
 import * as sharp_1 from 'sharp';
 import axios from 'axios';
 const path_thegioiso =
-  '/Users/duytu/Downloads/infinite-v4.2.1/cms_blog/public/uploads/images/';
+  '/Users/duytu/Downloads/infinite-v4.2.1/cms_blog/uploads/images/';
 @Controller()
 export class AppController {
   @Get()
