@@ -297,39 +297,44 @@ export class AppController {
           });
       });
     } else {
-      const input = (await axios({ url: fileUrl, responseType: 'arraybuffer' }))
-        .data as Buffer;
-      const image_750x_ = await sharp_1(input)
-        .resize(750)
-        // .jpeg({ mozjpeg: true })
-        .toFile(`${path_thegioiso + currentDate}/image_750x_${filename}`);
-      const image_750x415 = await sharp_1(input)
-        .resize(750, 415, {
-          fit: 'inside',
-        })
-        // .jpeg({ mozjpeg: true })
-        .toFile(`${path_thegioiso + currentDate}/image_750x415_${filename}`);
-      const image_100x75_ = await sharp_1(input)
-        .resize(100, 75, {
-          fit: 'inside',
-        })
-        // .jpeg({ mozjpeg: true })
-        .toFile(`${path_thegioiso + currentDate}/image_100x75_${filename}`);
-      const image_650x433_ = await sharp_1(input)
-        .resize(650, 433, {
-          fit: 'inside',
-        })
-        // .jpeg({ mozjpeg: true })
-        .toFile(`${path_thegioiso + currentDate}/image_650x433_${filename}`);
-      return {
-        status: true,
-        image_big: `uploads/images/${currentDate}/image_750x_${filename}`,
-        image_mid: `uploads/images/${currentDate}/image_750x415_${filename}`,
-        image_small: `uploads/images/${currentDate}/image_100x75_${filename}`,
-        image_slider: `uploads/images/${currentDate}/image_650x433_${filename}`,
-        filename: filename,
-        ext: ext,
-      };
+      console.log('fileUrl', fileUrl);
+      try {
+        const input = (
+          await axios({ url: fileUrl, responseType: 'arraybuffer' })
+        ).data as Buffer;
+        await sharp_1(input)
+          .resize(750)
+          // .jpeg({ mozjpeg: true })
+          .toFile(`${path_thegioiso + currentDate}/image_750x_${filename}`);
+        await sharp_1(input)
+          .resize(750, 415)
+          // .jpeg({ mozjpeg: true })
+          .toFile(`${path_thegioiso + currentDate}/image_750x415_${filename}`);
+        await sharp_1(input)
+          .resize(100, 75)
+          // .jpeg({ mozjpeg: true })
+          .toFile(`${path_thegioiso + currentDate}/image_100x75_${filename}`);
+        await sharp_1(input)
+          .resize(650, 433)
+          // .jpeg({ mozjpeg: true })
+          .toFile(`${path_thegioiso + currentDate}/image_650x433_${filename}`);
+        return {
+          status: true,
+          image_big: `uploads/images/${currentDate}/image_750x_${filename}`,
+          image_mid: `uploads/images/${currentDate}/image_750x415_${filename}`,
+          image_small: `uploads/images/${currentDate}/image_100x75_${filename}`,
+          image_slider: `uploads/images/${currentDate}/image_650x433_${filename}`,
+          filename: filename,
+          ext: ext,
+        };
+      } catch (error) {
+        console.log(error);
+        return {
+          status: false,
+          path: '',
+        };
+      }
+  
     }
   }
 }
